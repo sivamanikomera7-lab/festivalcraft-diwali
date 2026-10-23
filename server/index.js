@@ -13,6 +13,7 @@ import Database from "better-sqlite3";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
+console.log("FestivalCraft server starting...");
 const PORT = Number(process.env.PORT || 5000);
 const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || "http://localhost:5173";
 
@@ -24,3 +25,6 @@ const razorpayReady =
   (keyId.startsWith("rzp_test_") || keyId.startsWith("rzp_live_")) &&
   Boolean(keySecret) &&
   !keySecret.includes("REPLACE");
+app.listen(PORT, () => {
+  console.log(`FestivalCraft API running on port ${PORT}`);
+});
