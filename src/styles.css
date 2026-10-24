@@ -176,3 +176,187 @@ button:focus-visible {
     border-radius: 20px;
   }
 }
+
+/* ===== FestivalCraft Diwali Gift Reveal Design ===== */
+
+.gift-page.gift-is-open {
+  background:
+    radial-gradient(ellipse at 50% 35%, #b92343 0%, transparent 58%),
+    linear-gradient(180deg, #780b28 0%, #b51638 55%, #4a071b 100%);
+  overflow-x: hidden;
+}
+
+.gift-page.gift-is-open .gift-sky {
+  background:
+    radial-gradient(circle at 8% 20%, #ffd87955, transparent 18%),
+    radial-gradient(circle at 92% 25%, #ffd87955, transparent 18%),
+    radial-gradient(circle at 50% 95%, #ffb52f55, transparent 25%);
+}
+
+/* Festive golden border around the revealed gift */
+.gift-page.gift-is-open .revealed-gift {
+  width: min(760px, 100%);
+  padding: 35px 72px 45px;
+  box-sizing: border-box;
+  isolation: isolate;
+}
+
+.gift-page.gift-is-open .revealed-gift h1 {
+  color: #fff0b4;
+  text-shadow:
+    0 0 10px #ffcb65,
+    0 0 28px #ff7a36;
+}
+
+.gift-page.gift-is-open .slide-frame {
+  border: 5px solid #ff547b;
+  border-radius: 32px;
+  background: linear-gradient(135deg, #ffb4a5, #d81e51);
+  box-shadow:
+    0 0 0 2px #ffdf8a,
+    0 0 24px #ff6b69aa,
+    0 12px 35px #32000d88;
+  overflow: hidden;
+}
+
+.gift-page.gift-is-open .slide-frame img {
+  border-radius: 23px;
+}
+
+.gift-page.gift-is-open .gift-message {
+  color: #fff0d9;
+  text-shadow: 0 1px 5px #69091f;
+}
+
+.gift-page.gift-is-open .voice-card {
+  border: 1px solid #ffcf78;
+  border-radius: 24px;
+  background: #790b2c99;
+  box-shadow: 0 0 22px #ffb13c35;
+}
+
+.gift-page.gift-is-open .gold-divider {
+  color: #ffdf83;
+  text-shadow: 0 0 12px #ffcc57;
+}
+
+.gift-page.gift-is-open .from-line strong {
+  color: #ffe7a0;
+}
+
+/* Left and right decorative crackers */
+.gift-page.gift-is-open .revealed-gift::before,
+.gift-page.gift-is-open .revealed-gift::after {
+  position: absolute;
+  top: 100px;
+  z-index: -1;
+  width: 48px;
+  white-space: pre-line;
+  line-height: 2.2;
+  font-size: 28px;
+  pointer-events: none;
+  filter: drop-shadow(0 0 8px #ffb83f);
+  animation: diwaliCrackerGlow 1.5s ease-in-out infinite alternate;
+}
+
+.gift-page.gift-is-open .revealed-gift::before {
+  content: "🧨\A ✨\A 🎆\A ✨\A 🧨\A ✨\A 🎇";
+  left: 8px;
+}
+
+.gift-page.gift-is-open .revealed-gift::after {
+  content: "🎆\A ✨\A 🧨\A ✨\A 🎇\A ✨\A 🧨";
+  right: 8px;
+  animation-delay: .7s;
+}
+
+@keyframes diwaliCrackerGlow {
+  from {
+    opacity: .65;
+    transform: translateY(0) scale(.94);
+    filter: drop-shadow(0 0 5px #ffb83f);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-5px) scale(1.04);
+    filter: drop-shadow(0 0 15px #ffdf75);
+  }
+}
+
+/* Fireworks already present in the existing gift page */
+.gift-page.gift-is-open .fireworks {
+  opacity: 1;
+}
+
+.gift-page.gift-is-open .fireworks i {
+  box-shadow:
+    0 0 10px 3px hsl(var(--hue), 95%, 65%),
+    0 0 22px hsl(var(--hue), 95%, 60%);
+}
+
+/* Diya decoration at the bottom */
+.gift-page.gift-is-open .gift-footer {
+  width: 100%;
+  padding: 32px 12px 25px;
+  text-align: center;
+  color: #ffe5a3;
+  background:
+    radial-gradient(ellipse at center, #ffbd422b, transparent 70%);
+  border-top: 1px solid #ffdb7540;
+}
+
+.gift-page.gift-is-open .gift-footer::before {
+  content: "🪔  🪔  🪔  🪔  🪔  🪔  🪔";
+  display: block;
+  margin-bottom: 18px;
+  font-size: 25px;
+  letter-spacing: 2px;
+  filter: drop-shadow(0 0 8px #ffbb42);
+}
+
+/* Mobile responsive layout */
+@media (max-width: 560px) {
+  .gift-page.gift-is-open .revealed-gift {
+    width: 100%;
+    padding: 30px 46px 35px;
+  }
+
+  .gift-page.gift-is-open .revealed-gift::before,
+  .gift-page.gift-is-open .revealed-gift::after {
+    top: 105px;
+    width: 28px;
+    font-size: 19px;
+    line-height: 2.5;
+  }
+
+  .gift-page.gift-is-open .revealed-gift::before {
+    left: 3px;
+  }
+
+  .gift-page.gift-is-open .revealed-gift::after {
+    right: 3px;
+  }
+
+  .gift-page.gift-is-open .slide-frame {
+    border-width: 3px;
+    border-radius: 20px;
+    padding: 5px;
+  }
+
+  .gift-page.gift-is-open .slide-frame img {
+    border-radius: 14px;
+  }
+
+  .gift-page.gift-is-open .gift-footer::before {
+    font-size: 19px;
+    letter-spacing: 0;
+  }
+}
+
+/* Respect reduced-motion accessibility setting */
+@media (prefers-reduced-motion: reduce) {
+  .gift-page.gift-is-open .revealed-gift::before,
+  .gift-page.gift-is-open .revealed-gift::after {
+    animation: none;
+  }
+}
