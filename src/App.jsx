@@ -274,14 +274,30 @@ function GiftPage({ giftId }) {
       <p className="eyebrow">HAPPY DIWALI</p>
       <h1>Dear <span>{gift.receiver}</span></h1>
       <p className="gift-message">{gift.message}</p>
-      {photos.length > 0 && <div className="photo-carousel">
-        <div className="slide-frame"><img key={photos[slide]} src={photos[slide]} alt={`Gift memory ${slide + 1}`} /></div>
-        {photos.length > 1 && <div className="carousel-controls">
-          <button onClick={() => setSlide(s => (s - 1 + photos.length) % photos.length)} aria-label="Previous photo">←</button>
-          <span>{slide + 1} / {photos.length}</span>
-          <button onClick={() => setSlide(s => (s + 1) % photos.length)} aria-label="Next photo">→</button>
-        </div>}
-      </div>}
+     {photos.length > 0 && (
+  <div className="photo-gallery-box">
+
+    <div className="photo-gallery-heading">
+      ✦ OUR SPECIAL MEMORIES ✦
+    </div>
+
+    <div className={`photo-gallery-grid ${photos.length === 1 ? "one-photo" : ""}`}>
+      {photos.map((photo, index) => (
+        <div className="photo-gallery-item" key={`${photo}-${index}`}>
+          <img
+            src={photo}
+            alt={`Diwali Memory ${index + 1}`}
+          />
+        </div>
+      ))}
+    </div>
+
+    <div className="photo-gallery-footer">
+      ✧ HAPPY DIWALI ✧
+    </div>
+
+  </div>
+)}
       {gift.audio && <div className="voice-card"><span>🎙️ A voice message for you</span><audio controls preload="metadata" src={gift.audio} /></div>}
       <div className="gold-divider">✧　✦　✧</div>
       <p className="blessing">May your home glow with happiness, your heart with peace, and your life with endless light.</p>
