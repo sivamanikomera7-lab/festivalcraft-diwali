@@ -47,16 +47,185 @@ function playCrackers() {
   } catch { /* Audio is an enhancement; greeting must still open if unavailable. */ }
 }
 
+
 function Fireworks({ active = true }) {
-  return <div className={`fireworks ${active ? "fireworks-active" : ""}`} aria-hidden="true">
-    {Array.from({ length: 36 }, (_, i) => <i key={i} style={{
-      "--x": `${(i * 37 + 9) % 100}%`,
-      "--y": `${(i * 23 + 7) % 68}%`,
-      "--delay": `${(i % 9) * 0.17}s`,
-      "--hue": `${(i * 43) % 360}deg`
-    }} />)}
-  </div>;
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    if (!active) return;
+
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+
+    let width, height, animationId;
+    let rockets = [];
+    let particles = [];
+    let lastLaunch = 0;
+    let running = true;
+
+    const colors = [
+      "#FFD700", "#FF3030", "#00BFFF",
+      "#FF00FF", "#FFFFFF", "#FF8C00",
+      "#00FFAA", "#FF69B4"
+    ];
+
+    function resize() {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      width = window.innerWidth;
+      height = window.innerHeight;
+
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    window.addEventListener("resize", resize);
+    resize();
+
+    function launchRocket() {
+      rockets.push({
+        x: Math.random() * width,
+        y: height,
+        targetY: 60 + Math.random() * height * 0.48,
+        speed: 6 + Math.random() * 3,
+        color: colors[Math.floor(Math.random() * colors.length)]
+      });
+    }
+
+    function explode(x, y, color) {
+      const count = 130 + Math.floor(Math.random() * 100);
+
+      for (let i = 0; i < count; i++) {
+        const angle = Math.PI * 2 * i / count;
+        const speed = 1.5 + Math.random() * 6;
+
+        particles.push({
+          x, y,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          color,
+          life: 1,
+          decay: 0.006 + Math.random() * 0.009,
+          size: 1 + Math.random() * 2.2,
+          gravity: 0.045
+        });
+      }
+
+      // Extra golden sparkles
+      for (let i = 0; i < 35; i++) {
+        const angle = Math.random() * Math.PI * 2;
+
+        particles.push({
+          x, y,
+          vx: Math.cos(angle) * (2 + Math.random() * 4),
+          vy: Math.sin(angle) * (2 + Math.random() * 4),
+          color: "#FFD700",
+          life: 1,
+          decay: 0.012,
+          size: 1.5 + Math.random() * 2,
+          gravity: 0.05
+        });
+      }
+    }
+
+    function animate(time) {
+      if (!running) return;
+
+      ctx.clearRect(0, 0, width, height);
+
+      // Launch fireworks continuously
+      if (time - lastLaunch > 420) {
+        launchRocket();
+        lastLaunch = time;
+      }
+
+      // Rocket movement
+      rockets = rockets.filter(rocket => {
+        rocket.y -= rocket.speed;
+
+        ctx.beginPath();
+        ctx.moveTo(rocket.x, rocket.y + 12);
+        ctx.lineTo(rocket.x, rocket.y);
+        ctx.strokeStyle = rocket.color;
+        ctx.lineWidth = 3;
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = rocket.color;
+        ctx.stroke();
+
+        if (rocket.y <= rocket.targetY) {
+          explode(rocket.x, rocket.y, rocket.color);
+          return false;
+        }
+
+        return true;
+      });
+
+      // Particle explosions
+      particles = particles.filter(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vx *= 0.985;
+        p.vy *= 0.985;
+        p.vy += p.gravity;
+        p.life -= p.decay;
+
+        ctx.globalAlpha = Math.max(0, p.life);
+        ctx.fillStyle = p.color;
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = p.color;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+
+        return p.life > 0;
+      });
+
+      ctx.globalAlpha = 1;
+      ctx.shadowBlur = 0;
+
+      animationId = requestAnimationFrame(animate);
+    }
+
+    // Initial fireworks burst
+    for (let i = 0; i < 5; i++) {
+      setTimeout(() => {
+        if (running) {
+          explode(
+            Math.random() * width,
+            80 + Math.random() * height * 0.4,
+            colors[Math.floor(Math.random() * colors.length)]
+          );
+        }
+      }, i * 250);
+    }
+
+    animationId = requestAnimationFrame(animate);
+
+    return () => {
+      running = false;
+      cancelAnimationFrame(animationId);
+      window.removeEventListener("resize", resize);
+    };
+  }, [active]);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="fireworks-canvas"
+      aria-hidden="true"
+      style={{
+        position: "fixed",
+        inset: 0,
+        width: "100%",
+        height: "100%",
+        zIndex: 1,
+        pointerEvents: "none"
+      }}
+    />
+  );
 }
+
 
 function GiftPage({ giftId }) {
   const [gift, setGift] = useState(null);
