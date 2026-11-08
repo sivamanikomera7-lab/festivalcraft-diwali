@@ -437,26 +437,3 @@ button:focus-visible {
   padding: 15px 5px 5px;
   text-shadow: 0 0 15px #e8bd70;
 }
-
-/* MOBILE RESPONSIVE */
-
-@media (max-width: 560px) {
-  .photo-gallery-box {
-    width: 94%;
-    padding: 10px;
-    border-radius: 22px;
-  }
-
-  .photo-gallery-grid {
-    gap: 7px;
-    padding: 7px;
-  }
-
-  .photo-gallery-heading {
-    font-size: 10px;
-  }
-
-  .photo-gallery-footer {
-    font-size: 18px;
-  }
-}
